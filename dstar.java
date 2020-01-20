@@ -29,15 +29,22 @@ int score = 0;
 PFont f;
 int direction = 1;
 
+PImage img;
+int smallPoint, largePoint;
+
+
 int pixelsize = 4;
 int gridsize  = pixelsize * 7 + 5;
 
 Player p;
+//Star star;
 //Enemy e;
 ArrayList enemies = new ArrayList();
 ArrayList lasers = new ArrayList();
 ArrayList<Explosion> explosions = new ArrayList();
 ArrayList<LaserEx> laserex = new ArrayList(); 
+ArrayList stars = new ArrayList();
+
 SpriteSheet spriteSheet;  
 SpriteSheet2 spriteSheet2;  
 
@@ -45,6 +52,12 @@ boolean changeDir = false;
 
 public void setup() {
   
+  
+  smallPoint = 4;
+  largePoint = 40;
+  imageMode(CENTER);
+  noStroke();
+
 
   spriteSheet = new SpriteSheet();
   spriteSheet2 = new SpriteSheet2();
@@ -65,12 +78,12 @@ public void setup() {
   createEnemies();
   f = createFont("Arial", 36, true);
 
-  fill(Player.INK);
-  //stroke(Player.OUTLINE);
-  //strokeWeight(Player.BOLD);
+  createStars();
 
   p = new Player(width >> 1, height - 100, DIAM, SPD);
   //e = new Enemy(width >> 1, height >> 1, DIAM, SPD);
+  
+
 }
 
 public void createEnemies() {
@@ -87,8 +100,15 @@ public void createEnemies() {
 }
 
 
+public void createStars() {
+  for (int i = 0; i < 500; i++) {
+      stars.add(new Star());
+  }
+}
+
+
+
 public void mousePressed() {
-  // start it
   createEnemies();
   //explosions.add( new Explosion( mouseX, mouseY ));
 }
@@ -105,6 +125,11 @@ public void draw() {
   for (int i = 0; i < lasers.size(); i++) {
     PlayerLaser playerlaser = (PlayerLaser) lasers.get(i);
     playerlaser.display();
+  }
+  
+  for (int i = 0; i < stars.size(); i++) {
+    Star star = (Star) stars.get(i);
+    star.show();
   }
 
   for (int i = 0; i < enemies.size(); i++) {
@@ -125,6 +150,18 @@ public void draw() {
       enemy.display();
     }
   }
+  
+   for (LaserEx laserex1 : laserex) {
+    laserex1.display();
+  }
+
+  for (int i = laserex.size()-1; i >= 0; i--) {
+    LaserEx laserex2 = laserex.get(i);
+    if (!laserex2.exist) {
+      laserex.remove(i);
+    }
+  }
+  
 
   for (Explosion explosion1 : explosions) {
     explosion1.display();
@@ -136,16 +173,7 @@ public void draw() {
       explosions.remove(i);
     }
   }
-  for (LaserEx laserex1 : laserex) {
-    laserex1.display();
-  }
-
-  for (int i = laserex.size()-1; i >= 0; i--) {
-    LaserEx laserex2 = laserex.get(i);
-    if (!laserex2.exist) {
-      laserex.remove(i);
-    }
-  }
+ 
   
   if (enemies.size() == 0){
     playAgain();
@@ -516,7 +544,6 @@ class PlayerLaser {
     }
   }
 }
-
 class SpriteSheet {
   // a list of images with the frames of the explosions
   PImage frames[];
@@ -557,6 +584,23 @@ class SpriteSheet2 {
   } // constr
 } // class
 //
+class Star {
+  float x = random(0,600);
+  float y = random(0,800);
+  float w = random(1,3);
+  float h = random(1,3);
+
+  Star() {
+  //  x = xx;
+   // y = yy;
+  }
+  
+  public void show() {
+    fill (255);
+    rectMode(CENTER);
+    rect(x,y,w,h);
+  }
+}
   public void settings() {  size(600, 800);  smooth(3); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "dstar" };
