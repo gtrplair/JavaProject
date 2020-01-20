@@ -101,7 +101,7 @@ public void createEnemies() {
 
 
 public void createStars() {
-  for (int i = 0; i < 500; i++) {
+  for (int i = 0; i < 800; i++) {
       stars.add(new Star());
   }
 }
@@ -589,6 +589,9 @@ class Star {
   float y = random(0,800);
   float w = random(1,3);
   float h = random(1,3);
+  float r = random(1,3);
+  
+  float distance = random(0,255);
 
   Star() {
   //  x = xx;
@@ -596,9 +599,12 @@ class Star {
   }
   
   public void show() {
-    fill (255);
-    rectMode(CENTER);
-    rect(x,y,w,h);
+    fill (distance);
+ //   rectMode(CENTER);
+ //   rect(x,y,w,h);
+ //  circleMode(CENTER);
+   circle(x,y,r);
+ 
   }
 }
   public void settings() {  size(600, 800);  smooth(3); }
